@@ -17,7 +17,40 @@ body {
 .Cards {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 5px;
+}
+
+.Cards > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: calc(25% - 15px);
+    max-height: 300px;
+    min-width: 300px;
+
+}
+
+@media (max-width: 1215px)
+{
+    .Cards > div {
+        width: calc(33% - 10px);
+    }
+}
+
+@media (max-width: 910px)
+{
+    .Cards > div {
+        width: calc(50% - 5px);
+    }
+} 
+
+@media (max-width: 604px)
+{
+    .Cards > div {
+        width: calc(100%);
+    }
 }
 
 .Card {
@@ -26,9 +59,12 @@ body {
     margin: 2px;
     transition: 0.6s;
     margin-bottom: 20px;
-    width: 320px;
-    height: 320px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
+
+
 
 .Card:hover {
     transform: scale(1.02);
@@ -57,6 +93,7 @@ body {
     display: flex;
     justify-content: left;
     box-sizing: border-box;
+    padding: 4em 0 0 0;
 }
 
 .headerPage .headerPage-Logo > img {

@@ -152,11 +152,13 @@ function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    console.log("###" + company)
+    console.log("###" + logo)
     return (
         <div className="App">
             <div className="headerPage">
                 <div className="headerPage-Logo">
-                    <img src="./helbor-logo-1.png" alt="Logo" />
+                    <img src={logo} alt="Logo" />
                 </div>
                 <div className="headerPage-Filters">
                     <div className="headerPage-Subfooter">
