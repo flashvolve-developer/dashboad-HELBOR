@@ -1,25 +1,158 @@
 import "../App.css";
-
-import React from "react";
+import { FiDownload } from 'react-icons/fi';
+import React, { useState, useContext } from "react";
+import AppContext from '../context/AppContext';
 
 export default function customizationsCard({ customization }) {
+  const [hidden, setHidden] = useState(true);
+  const { selectedCards, setSelectedCards } = useContext(AppContext);
+
+  function toggleSelectedCard(id) {
+    // console.log(selectedCards);
+
+    if (selectedCards.includes(id)) {
+      const filtered = selectedCards.filter((value) => value !== id);
+      setSelectedCards(filtered);
+    } else {
+      const arraySelected = selectedCards.length === 0 ? [] : selectedCards;
+
+      arraySelected.push(id);
+      setSelectedCards(arraySelected);
+    }
+  }
+
+  const download = (e, url) => {
+    e.preventDefault();
+
+    fetch(url, {
+      method: "GET",
+      headers: {}
+    })
+      .then(response => {
+        response.arrayBuffer().then(function (buffer) {
+          const Url = window.URL.createObjectURL(new Blob([buffer]));
+          const link = document.createElement("a");
+          link.href = Url;
+          link.setAttribute("download", "image.png");
+          document.body.appendChild(link);
+          link.click();
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
-    <div>
-      {console.log(customization.cloudinary.slice(customization.cloudinary.length - 3))}
+    <>
       {
-      customization.cloudinary.slice(customization.cloudinary.length - 3)
-      === "mp4" ? (
-        <video alt={customization.whatsapp} className="Card">
-          <source src={customization.cloudinary} type="video/mp4">
-          </source>
-        </video>
-      ) : (
-        <img
-          className="Card"
-          data-testid={`customization__img-card-${customization.id}`}
-          src={customization.cloudinary || customization.figurinha}
-          alt={customization.whatsapp}/>
-      )}
-    </div>
+        customization.cloudinary.slice(customization.cloudinary.length - 3)
+          === "mp4" ? (
+          <div>
+            <div className="DataVisible">
+              <button
+                onClick={() => setHidden(!hidden)}
+              >
+                {
+                  hidden ?
+                    <span className="material-symbols-outlined">
+                      visibility_off
+                    </span> :
+                    <span className="material-symbols-outlined">
+                      visibility
+                    </span>
+                    // <HiEye />
+                    // :
+                    // <HiEyeOff />
+                }
+              </button>
+              <span hidden={hidden}>
+                id: {customization.id}/  whatsapp: {customization.whatsapp}
+              </span>
+            </div>
+            <video alt={customization.whatsapp} className="Card" controls>
+              <source src={customization.cloudinary} type="video/mp4">
+              </source>
+            </video>
+            <div className="button-download-box">
+              <div className="btn-download">
+                <label htmlFor={customization.id}>
+                  <input
+                    type="checkbox"
+                    id={customization.id}
+                    onChange={() => toggleSelectedCard(customization.id)}
+                  />
+                  selecionar
+                </label>
+              </div>
+              <div className="btn-download">
+              <label htmlFor="btn-image-download">
+                  <div className="button"
+                    id="url-btn"
+                    download
+                    onClick={(e) => download(e, customization.cloudinary)}
+                  >
+                    {/* <FiDownload /> */}
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="DataVisible">
+              <button className='button'
+                onClick={() => setHidden(!hidden)}
+              >
+                {
+                  hidden ?
+                    <span className="material-symbols-outlined">
+                      visibility_off
+                    </span> :
+                    <span className="material-symbols-outlined">
+                      visibility
+                    </span>
+                    // <HiEye />
+                    // :
+                    // <HiEyeOff />
+                }
+              </button>
+              <span hidden={hidden}>
+                id:{customization.id}/   whatsapp:{customization.whatsapp}
+              </span>
+            </div>
+            <img
+              className="Card"
+              data-testid={`customization__img-card-${customization.id}`}
+              src={customization.cloudinary}
+              alt={customization.whatsapp}
+            />
+            <div className="button-download-box">
+              <div className="btn-download">
+                <label htmlFor={customization.id}>
+                  <input
+                    type="checkbox"
+                    id={customization.id}
+                    onChange={() => toggleSelectedCard(customization.id)}
+                  />
+                  selecionar
+                </label>
+              </div>
+              <div className="btn-download">
+                <label htmlFor="btn-image-download">
+                  <div className="button"
+                    id="url-btn"
+                    download
+                    onClick={(e) => download(e, customization.cloudinary)}
+                  >
+                    <FiDownload />
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </>
   );
 }
